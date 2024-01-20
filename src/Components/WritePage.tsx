@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const WritePage = () => {
   const [playerPrompt, setPlayerPrompt] = useState("");
   const gameId = localStorage.getItem("gameId");
   const playerName = localStorage.getItem("playerName");
+  const navigate = useNavigate();
 
   const postPlayerPrompt = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -28,12 +30,15 @@ const WritePage = () => {
 
         await updateDoc(gameRef, { players: updatedPlayers });
         console.log("Player prompt submitted: ", playerPrompt);
+
+        navigate(`/game-room-read/${gameId}`);
       } else {
         console.error("Game does not exist");
       }
     } catch (error) {
       console.error("Unable to submit player prompt! ", error);
     }
+
   };
 
   return (

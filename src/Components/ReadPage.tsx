@@ -2,13 +2,6 @@ import { useState } from "react";
 
 const ReadPage = () => {
 /*
-    const getPlayerInputFromServer = async() => {
-        
-        const currPlayerId = localStorage.getItem("playerName"); 
-        const currGameId = localStorage.getItem("gameId"); 
-    }; 
-  */ 
-    
     const jumbleAndRandom = (s: string) => {
         
         const n = s.length; 
@@ -40,15 +33,18 @@ const ReadPage = () => {
         return s_arr.join(); 
 
     }
-
+*/
     // NOTE: Change this to generatePrompt()
-    const [prompt] = useState(""); 
+    const [prompt] = useState("THIS IS A PLACEHOLDER!"); 
     const [playerPrompt, setPlayerPrompt] = useState("");
-
+/*
     const generatePrompt = () => {
     }; 
 
-
+    const postPlayerPrompt = () => {
+        console.log(playerPrompt); 
+    };
+*/
     return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -63,8 +59,16 @@ const ReadPage = () => {
           onChange={(e) => setPlayerPrompt(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-
-
+        
+    
+        <button
+          onClick={() => alert("HI") }
+          className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+        >
+          <a href="/" className="no-underline text-white">
+            Submit
+          </a>
+        </button>
       </div>
     </div>
 
