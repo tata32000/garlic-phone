@@ -3,11 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const CreateGame = () => {
   const [userName, setUserName] = useState("");
-  // Generate a random 6-digit number as the initial gameId
-  const [gameId] = useState(
-    Math.floor(100000 + Math.random() * 900000)
-  );
-
+  const [gameId] = useState(Math.floor(100000 + Math.random() * 900000));
+  const [copySuccess, setCopySuccess] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (event: { preventDefault: () => void; }) => {
@@ -17,6 +14,19 @@ const CreateGame = () => {
     } else {
       alert("Please enter a valid user name.");
     }
+  };
+
+  const copyLinkToClipboard = () => {
+    const link = `http://localhost:5173/waiting-room/${gameId}`;
+    navigator.clipboard.writeText(link).then(
+      () => {
+        setCopySuccess("Link copied to clipboard!");
+      },
+      (err) => {
+        setCopySuccess("Failed to copy the link.");
+        console.error("Could not copy text: ", err);
+      }
+    );
   };
 
   return (
@@ -47,12 +57,26 @@ const CreateGame = () => {
             </p>
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Create Game
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={copyLinkToClipboard}
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Copy Game Link
+            </button>
+
+            <button
+              type="submit"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              <span className="no-underline text-white">Create Game</span>
+            </button>
+          </div>
+
+          {copySuccess && (
+            <div className="text-green-500 mb-4">{copySuccess}</div>
+          )}
         </form>
       </div>
     </div>
