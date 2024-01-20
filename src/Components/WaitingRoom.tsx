@@ -15,7 +15,7 @@ const WaitingRoom = () => {
 
   const redirectHome = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    navigate("/home");
+    navigate("/");
   };
 
   const toGameScreen = (event: { preventDefault: () => void }) => {
