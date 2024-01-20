@@ -1,37 +1,12 @@
-import { useState } from "react";
-// import { doc, setDoc, arrayUnion } from "firebase/firestore";
-// import { db } from "../firebase";
+import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc, arrayUnion, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
 
 const WritePage = () => {
     
   const[playerPrompt, setPlayerPrompt] = useState('');
  
   const postPlayerPrompt = async (e: { preventDefault: () => void; }) => {
-    e.preventDefault(); 
-
-    try {
-
-    } catch (error) {
-        console.error("Unable to submit player prompt! ", error);
-    }
-
-/*
-    const currPlayerName = localStorage.getItem("playerName"); 
-    const currGameId = localStorage.getItem("gameId"); 
-    const gameRef = doc(db, "games", JSON.stringify(currGameId));        
-    
-    gameRef.get().then((doc) => {
-        if (doc.exists()) {
-            const data = doc.data();
-
-            for (const field in data) {
-            }
-        }
-    }).catch( (error) => {
-        console.error("Document does not exist, ", error);
-    });
-    */
-
   };
 
   return (
