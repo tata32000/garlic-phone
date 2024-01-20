@@ -1,26 +1,41 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; 
+import { doc, setDoc, arrayUnion } from "firebase/firestore";
+import { db } from "../firebase";
 
 const JoinGame = () => {
     const [userName, setUserName] = useState('');
 
     const url = window.location.href; 
-
     const urlGameId = url.slice(url.indexOf('game/')+5);
     const [gameId, setGameId] = useState(
-    (urlGameId !== "") && (urlGameId.length <= 6) ? urlGameId : ''
+    (urlGameId !== "") && (urlGameId.length <= 6) ? +urlGameId : ''
     );
-
 
     const navigate = useNavigate();
 
-    const handleSubmit = (event: { preventDefault: () => void; }) => {
-        event.preventDefault(); 
-        if (gameId === "") {
-            alert("Please enter a valid game ID"); 
-        }
-        navigate(`/waiting-room/${gameId}`);
-    };
+  const addToGame = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+  
+    if (gameId === "") {
+        alert("Please enter a valid game ID"); 
+    }
+
+    try {
+      const gameRef = doc(db, "games", JSON.stringify(gameId));
+  
+      // This will create the document if it doesn't exist
+      await setDoc(gameRef, {
+        players: arrayUnion(userName)
+      }, { merge: true });
+  
+      console.log("Player added to the game: ", userName);
+  
+      navigate(`/waiting-room/${gameId}`);
+    } catch (error) {
+      console.error("Error adding player to the game: ", error);
+    }
+  };
 
     // Redirects to home 
     const redirectHome = (event: { preventDefault: () => void; }) => {
@@ -33,7 +48,7 @@ const JoinGame = () => {
             <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h1 className="text-xl font-bold mb-4">Join Game</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={addToGame}>
             <div className="mb-4">
             <label
             htmlFor="userName"
@@ -72,7 +87,7 @@ const JoinGame = () => {
         </a>
         </button>
         <button
-        onClick={handleSubmit}
+        onClick={addToGame}
         className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
         Join Game

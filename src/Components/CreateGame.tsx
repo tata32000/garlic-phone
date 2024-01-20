@@ -9,15 +9,6 @@ const CreateGame = () => {
   const [copySuccess, setCopySuccess] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    if (userName.trim() !== "") {
-      navigate(`/waiting-room/${gameId}`);
-    } else {
-      alert("Please enter a valid user name.");
-    }
-  };
-
   const addToGame = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   
@@ -28,7 +19,10 @@ const CreateGame = () => {
       await setDoc(gameRef, {
         players: arrayUnion(userName)
       }, { merge: true });
-  
+
+      localStorage.setItem("playerName", userName);
+      localStorage.setItem("gameId", String(gameId));     
+      
       console.log("Player added to the game: ", userName);
   
       navigate(`/waiting-room/${gameId}`);
@@ -55,7 +49,7 @@ const CreateGame = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h1 className="text-xl font-bold mb-4">Create Game</h1>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={addToGame}>
           <div className="mb-4">
             <label
               htmlFor="userName"
