@@ -7,7 +7,7 @@ const CreateGame = () => {
   const [copySuccess, setCopySuccess] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     if (userName.trim() !== "") {
       navigate(`/waiting-room/${gameId}`);
