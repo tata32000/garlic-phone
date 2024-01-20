@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const WaitingRoom = () => {
@@ -18,9 +18,13 @@ const WaitingRoom = () => {
     navigate("/");
   };
 
-  const toGameScreen = (event: { preventDefault: () => void }) => {
+  const toGameScreen = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    navigate(`/game-room/${gameId}`);
+
+    const gameRef = doc(db, "games", gameId);
+    await updateDoc(gameRef, { start: true, counter: 0, playerLength: Object.keys(players).length});
+    console.log("Game started");
+
   };
 
   useEffect(() => {
@@ -30,6 +34,9 @@ const WaitingRoom = () => {
       if (doc.exists()) {
         const gameData = doc.data();
         setPlayers(gameData.players || {});
+        if (gameData.start) {
+          navigate(`/game-room/${gameId}`);
+        }
       } else {
         // Handle the case where the game does not exist
         console.log("No such game!");

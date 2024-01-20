@@ -63,6 +63,8 @@ const CreateGame = () => {
         await setDoc(gameRef, {
           players: { [userName]: [] }, // Initialize with the first player
           idx_to_player: { 0: userName }, // Initialize with the first player
+          rounds: 1,
+          start: false,
         });
 
         localStorage.setItem("playerName", userName);
