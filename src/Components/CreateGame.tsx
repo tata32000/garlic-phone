@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const CreateGame = () => {
   const [userName, setUserName] = useState("");
@@ -14,6 +16,21 @@ const CreateGame = () => {
     } else {
       alert("Please enter a valid user name.");
     }
+  };
+
+  const addToGame = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+
+    try {
+      const docRef = await addDoc(collection(db, JSON.stringify(gameId)), {
+        player: userName,
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
+    navigate(`/waiting-room/${gameId}`);
   };
 
   const copyLinkToClipboard = () => {
@@ -67,7 +84,8 @@ const CreateGame = () => {
             </button>
 
             <button
-              type="submit"
+              type="button"
+              onClick={addToGame}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               <span className="no-underline text-white">Create Game</span>
