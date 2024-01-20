@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../firebase";
 
 const CreateGame = () => {
@@ -20,18 +20,23 @@ const CreateGame = () => {
 
   const addToGame = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-
+  
     try {
-      const docRef = await addDoc(collection(db, JSON.stringify(gameId)), {
-        player: userName,
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
+      const gameRef = doc(db, "games", JSON.stringify(gameId));
+  
+      // This will create the document if it doesn't exist
+      await setDoc(gameRef, {
+        players: arrayUnion(userName)
+      }, { merge: true });
+  
+      console.log("Player added to the game: ", userName);
+  
+      navigate(`/waiting-room/${gameId}`);
+    } catch (error) {
+      console.error("Error adding player to the game: ", error);
     }
-
-    navigate(`/waiting-room/${gameId}`);
   };
+  
 
   const copyLinkToClipboard = () => {
     const link = `http://localhost:5173/waiting-room/${gameId}`;
