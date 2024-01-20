@@ -5,8 +5,9 @@ const WaitingRoom = () => {
   // list of players from firebase database
   const [players] = useState([]);
 
-  const urlGameId = window.location.href.match(/:(\d+)/); 
-  const gameId = urlGameId ? urlGameId[1] : ''; 
+  const url = window.location.href; 
+  const urlGameId = url.slice(url.indexOf('/waiting-room/') + 14); 
+  const gameId = urlGameId.length !== 0 ? urlGameId : ''; 
 
   const navigate = useNavigate();
  

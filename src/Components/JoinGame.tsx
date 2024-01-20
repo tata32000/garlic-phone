@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 const JoinGame = () => {
     const [userName, setUserName] = useState('');
-    const gameIdReg = /:(\d+)/;
 
     const url = window.location.href; 
 
-    const urlGameId = url.slice(url.indexOf('join-game')).match(gameIdReg);
-    const [gameId, setGameId] = useState(urlGameId ? urlGameId[1] : '');
+    const urlGameId = url.slice(url.indexOf('game/')+5);
+    const [gameId, setGameId] = useState(
+    (urlGameId !== "") && (urlGameId.length <= 6) ? urlGameId : ''
+    );
 
 
     const navigate = useNavigate();
