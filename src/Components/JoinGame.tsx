@@ -24,7 +24,7 @@ const JoinGame = () => {
     // Redirects to home 
     const redirectHome = (event: { preventDefault: () => void; }) => {
         event.preventDefault(); 
-        navigate('/home/');
+        navigate('/');
     };
 
 

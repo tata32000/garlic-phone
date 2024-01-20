@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const WaitingRoom = () => {
   // list of players from firebase database
-  const [players, setPlayers] = useState([]);
+  const [players] = useState([]);
 
   const urlGameId = window.location.href.match(/:(\d+)/); 
   const gameId = urlGameId ? urlGameId[1] : ''; 
