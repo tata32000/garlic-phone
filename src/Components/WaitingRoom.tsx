@@ -20,7 +20,7 @@ const WaitingRoom = () => {
 
   const toGameScreen = (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    navigate(`/game-room/:${gameId}`);
+    navigate(`/game-room/${gameId}`);
   };
 
   useEffect(() => {
