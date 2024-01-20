@@ -52,6 +52,7 @@ const JoinGame = () => {
 
       localStorage.setItem("playerName", userName);
       localStorage.setItem("gameId", gameId);
+      localStorage.setItem("playerIndex", playersSize.toString());
 
       console.log("Player added to the game: ", userName);
 
