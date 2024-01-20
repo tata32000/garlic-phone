@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const ReadPage = () => {
@@ -44,30 +44,32 @@ const ReadPage = () => {
   const playerIdx: number = Number(localStorage.getItem("playerIndex")) || 0;
 
   useEffect(() => {
-    const gameRef = doc(db, "games", gameId);
+    const fetchGameData = async () => {
+      try {
+        const gameRef = doc(db, "games", gameId);
+        const docSnap = await getDoc(gameRef);
 
-    const unsubscribe = onSnapshot(
-      gameRef,
-      (doc: { exists: () => any; data: () => any }) => {
-        if (doc.exists()) {
-          const gameData = doc.data();
+        if (docSnap.exists()) {
+          const gameData = docSnap.data();
           const promptList =
             gameData.players[
               gameData.idx_to_player[(playerIdx + 1) % gameData.playerLength]
             ];
 
           console.log("promptList: ", promptList);
-          const randomizedPrompt = modifyString(promptList[promptList.length - 1]);
+          const randomizedPrompt = modifyString(
+            promptList[promptList.length - 1]
+          );
           setPrompt(randomizedPrompt);
         } else {
-          // Handle the case where the game does not exist
-          console.log("No prompt?!");
+          console.log("No such game or prompt!");
         }
+      } catch (error) {
+        console.error("Error fetching game data: ", error);
       }
-    );
+    };
 
-    // Clean up the listener
-    return () => unsubscribe();
+    fetchGameData();
   }, [gameId]);
 
   const navigate = useNavigate();
