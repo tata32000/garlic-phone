@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc, arrayUnion, getDoc} from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const CreateGame = () => {
@@ -32,7 +32,6 @@ const CreateGame = () => {
     generateUniqueGameId();
   }, []);
 
-
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
     if (userName.trim() !== "") {
@@ -45,22 +44,32 @@ const CreateGame = () => {
   const addToGame = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   
-    try {
-      const gameRef = doc(db, "games", JSON.stringify(gameId));
+    if (gameId === null) {
+      alert("Please enter a valid game ID");
+      return;
+    }
   
-      // This will create the document if it doesn't exist
-      await setDoc(gameRef, {
-        players: arrayUnion(userName)
-      }, { merge: true });
-
-      localStorage.setItem("playerName", userName);
-      localStorage.setItem("gameId", String(gameId));     
-      
-      console.log("Player added to the game: ", userName);
+    try {
+      const gameRef = doc(db, "games", gameId.toString());
+  
+      // Check if the game document exists
+      const docSnap = await getDoc(gameRef);
+      if (docSnap.exists()) {
+        // Game exists, update the game document with the new player
+        alert("Game already exists")
+        return;
+      } else {
+        // Game does not exist, create a new game document with the gameId
+        await setDoc(gameRef, {
+          players: { [userName]: [] } // Initialize with the first player
+        });
+  
+        console.log("New game created with player: ", userName);
+      }
   
       navigate(`/waiting-room/${gameId}`);
     } catch (error) {
-      console.error("Error adding player to the game: ", error);
+      console.error("Error processing the game: ", error);
     }
   };
   

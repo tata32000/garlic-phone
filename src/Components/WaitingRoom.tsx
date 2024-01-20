@@ -5,7 +5,7 @@ import { db } from "../firebase";
 
 const WaitingRoom = () => {
   // list of players from firebase database
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState({});
 
   const url = window.location.href;
   const urlGameId = url.slice(url.indexOf("/waiting-room/") + 14);
@@ -29,7 +29,7 @@ const WaitingRoom = () => {
     const unsubscribe = onSnapshot(gameRef, (doc) => {
       if (doc.exists()) {
         const gameData = doc.data();
-        setPlayers(gameData.players || []);
+        setPlayers(gameData.players || {});
       } else {
         // Handle the case where the game does not exist
         console.log("No such game!");
@@ -53,9 +53,9 @@ const WaitingRoom = () => {
             Players
           </label>
           <ul className="list-disc pl-5">
-            {players.map((player, index) => (
+            {Object.keys(players).map((playerName, index) => (
               <li key={index} className="text-gray-700 text-md mb-1">
-                {player}
+                {playerName} {/* Display player's name */}
               </li>
             ))}
           </ul>
