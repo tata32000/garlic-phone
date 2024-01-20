@@ -41,8 +41,30 @@ const PlayerWaiting = () => {
 
   return (
     <>
-      <div>
-        Waiting for other players... {counter} / {playerLength}
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white shadow-lg rounded-lg p-6 max-w-sm text-center">
+          <h2 className="text-xl font-semibold mb-4">
+            Waiting for other players...
+          </h2>
+          <p className="text-gray-700 text-lg">
+            {counter === undefined ? 0 : counter % playerLength} /{" "}
+            {playerLength}
+          </p>
+          <div className="mt-4">
+            <div className="inline-flex w-full overflow-hidden bg-gray-200 rounded-full">
+              <div
+                style={{
+                  width: `${
+                    ((counter === undefined ? 0 : counter % playerLength) /
+                      playerLength) *
+                    100
+                  }%`,
+                }}
+                className="bg-blue-500 h-2 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-l-full"
+              ></div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
