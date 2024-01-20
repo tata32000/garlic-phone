@@ -49,23 +49,15 @@ const CreateGame = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
-          <div className="mb-6">
-            <label
-              htmlFor="gameId"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              Game ID
-            </label>
-            <input
-              id="gameId"
-              type="text"
-              value={gameId}
-              onChange={(e) => setGameId(e.target.value)}
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            />
+
+          <div className="mb-4">
+            <p className="text-gray-600">
+              Your Game ID:{" "}
+              <span className="font-bold text-gray-800">{gameId}</span>
+            </p>
           </div>
 
-        <div className="flex gap-2">
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={copyLinkToClipboard}
@@ -85,7 +77,6 @@ const CreateGame = () => {
           {copySuccess && (
             <div className="text-green-500 mb-4">{copySuccess}</div>
           )}
-        
         </form>
       </div>
     </div>
