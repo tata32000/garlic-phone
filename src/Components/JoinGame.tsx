@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc, arrayUnion, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const JoinGame = () => {
@@ -17,7 +17,7 @@ const JoinGame = () => {
   const addToGame = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    if (gameId === null) {
+    if (gameId === null || gameId.trim() === "") {
       alert("Please enter a valid game ID");
       return;
     }
@@ -32,14 +32,22 @@ const JoinGame = () => {
         return; // Exit the function if the game doesn't exist
       }
 
-      // Update the game document by adding the new player
-      await setDoc(
-        gameRef,
-        {
-          players: arrayUnion(userName),
-        },
-        { merge: true }
-      );
+      // Get current game data
+      const gameData = docSnap.data();
+
+      // Check if the player already exists in the game data
+      const newPlayerData =
+        gameData.players && gameData.players[userName]
+          ? { ...gameData.players } // Player already exists, use existing data
+          : { ...gameData.players, [userName]: [] }; // New player, initialize with empty array
+
+      // Update the game document with the new player data
+      await updateDoc(gameRef, {
+        players: newPlayerData,
+      });
+
+      localStorage.setItem("playerName", userName);
+      localStorage.setItem("gameId", gameId);
 
       console.log("Player added to the game: ", userName);
 
