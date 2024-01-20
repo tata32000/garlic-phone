@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ReadPage = () => {
 /*
@@ -37,6 +38,7 @@ const ReadPage = () => {
     // NOTE: Change this to generatePrompt()
     const [prompt] = useState("THIS IS A PLACEHOLDER!"); 
     const [playerPrompt, setPlayerPrompt] = useState("");
+    const gameId = localStorage.getItem("gameId"); 
 /*
     const generatePrompt = () => {
     }; 
@@ -45,6 +47,15 @@ const ReadPage = () => {
         console.log(playerPrompt); 
     };
 */
+    
+    const navigate = useNavigate(); 
+    const testReveal = (e: {preventDefault: () => void}) => {
+        e.preventDefault();
+        console.log("Going to the reveal!");        
+        navigate(`/game-reveal/${gameId}`); 
+    };
+
+
     return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -67,6 +78,15 @@ const ReadPage = () => {
         >
           <a href="/" className="no-underline text-white">
             Submit
+          </a>
+        </button>
+        
+        <button
+          onClick={testReveal }
+          className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+        >
+          <a href="/" className="no-underline text-white">
+            Go to reveal!
           </a>
         </button>
       </div>

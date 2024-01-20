@@ -6,6 +6,7 @@ import JoinGame from './Components/JoinGame';
 import WaitingRoom from './Components/WaitingRoom';
 import WritePage from './Components/WritePage.tsx'; 
 import ReadPage from './Components/ReadPage.tsx'; 
+import RevealPage from './Components/RevealPage.tsx'; 
 
 const App = () => {
  return (
@@ -18,6 +19,7 @@ const App = () => {
           <Route path='/waiting-room/:gameId' element={<WaitingRoom />} />
           <Route path='/game-room/:gameId' element={<WritePage />} />
           <Route path='/game-room-read/:gameId' element={<ReadPage />} /> 
+          <Route path='/game-reveal/:gameId' element={<RevealPage />} /> 
        </Routes>
     </>
  );
