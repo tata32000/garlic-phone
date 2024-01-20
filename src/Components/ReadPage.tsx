@@ -2,39 +2,42 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ReadPage = () => {
-/*
+    /*
     const jumbleAndRandom = (s: string) => {
         
-        const n = s.length; 
+        const n : number= s.length; 
 
         const s_arr = s.split("");
 
-        const numToAlter = Math.floor(n / 3) === 0 ? 1 : Math.floor(n / 3); 
+        const numToAlter : number = Math.floor(n / 3) === 0 ? 1 : Math.floor(n / 3); 
     
-        const alteredIndices = {}; 
+        const alteredIndices : { [key: number] : number}= {}; 
 
         for (let j = 0; j < Math.floor(numToAlter/2);  ++j) {
             
-            let indexToRemove = undefined; 
-            let indexToAlter = undefined; 
+            let indexToRemove; 
+            let indexToAlter; 
 
-            while (alteredIndices[indexToRemove] !== undefined) {
+            do {
                 indexToRemove = Math.floor(Math.random() * (n+1)); 
-                alteredIndices[indexToRemove] = 1;
-                s_arr[indexToRemove] = '_';
-            }
+            } while (!(indexToRemove in alteredIndices));
 
-            while (alteredIndices[indexToAlter] !== undefined) {
+            alteredIndices[indexToRemove] = 1;
+            s_arr[indexToRemove] = '_';
+            
+            do {
                 indexToAlter = Math.floor(Math.random() * (n+1)); 
-                alteredIndices[indexToAlter] = 1;
-                s_arr[indexToAlter] = String.fromCharCode(Math.floor(Math.random() * 26));
-            }
+            } while (!(indexToAlter in alteredIndices));
+
+            alteredIndices[indexToAlter] = 1;
+            s_arr[indexToAlter] = String.fromCharCode(Math.floor(Math.random() * 26));
+            
         }
 
         return s_arr.join(); 
 
     }
-*/
+    */
     // NOTE: Change this to generatePrompt()
     const [prompt] = useState("THIS IS A PLACEHOLDER!"); 
     const [playerPrompt, setPlayerPrompt] = useState("");
