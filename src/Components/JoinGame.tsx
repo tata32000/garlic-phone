@@ -8,8 +8,8 @@ const JoinGame = () => {
 
     const url = window.location.href; 
     const urlGameId = url.slice(url.indexOf('game/')+5);
-    const [gameId, setGameId] = useState(
-    (urlGameId !== "") && (urlGameId.length <= 6) ? +urlGameId : ''
+    const [gameId, setGameId] = useState<number>(
+    (urlGameId !== null) && (urlGameId.length <= 6) ? +urlGameId : 100000 // placeholder
     );
 
     const navigate = useNavigate();
@@ -17,7 +17,7 @@ const JoinGame = () => {
   const addToGame = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
   
-    if (gameId === "") {
+    if (gameId === null) {
         alert("Please enter a valid game ID"); 
     }
 
@@ -75,7 +75,7 @@ const JoinGame = () => {
             id="gameId"
             type="text"
             value={gameId}
-    onChange={(e) => setGameId(e.target.value)}
+    onChange={(e) => setGameId(+e.target.value)}
     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
         </div>
