@@ -31,19 +31,23 @@ const JoinGame = () => {
         alert("Game does not exist");
         return; // Exit the function if the game doesn't exist
       }
-
       // Get current game data
       const gameData = docSnap.data();
 
+      if (gameData.players[userName]) {
+        alert("User name already exists");
+        return;
+      }
+
+      const playersSize = Object.keys(gameData.players).length;
       // Check if the player already exists in the game data
-      const newPlayerData =
-        gameData.players && gameData.players[userName]
-          ? { ...gameData.players } // Player already exists, use existing data
-          : { ...gameData.players, [userName]: [] }; // New player, initialize with empty array
+      const newPlayerData = { ...gameData.players, [userName]: [] }; // New player, initialize with empty array
+      const newPlayerIdx = { ...gameData.idx_to_player, [playersSize]: userName }; // New player, initialize with empty array
 
       // Update the game document with the new player data
       await updateDoc(gameRef, {
         players: newPlayerData,
+        idx_to_player: newPlayerIdx,
       });
 
       localStorage.setItem("playerName", userName);
