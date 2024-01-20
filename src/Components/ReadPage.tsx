@@ -57,8 +57,8 @@ const ReadPage = () => {
             ];
 
           console.log("promptList: ", promptList);
-          const newPrompt = modifyString(promptList[promptList.length - 1]);
-          setPrompt(newPrompt);
+          const randomizedPrompt = modifyString(promptList[promptList.length - 1]);
+          setPrompt(randomizedPrompt);
         } else {
           // Handle the case where the game does not exist
           console.log("No prompt?!");
@@ -90,6 +90,7 @@ const ReadPage = () => {
         const updatedPlayers = gameData.players || {};
         const playerPrompts = updatedPlayers[playerName] || [];
         const playerLength = Object.keys(updatedPlayers).length || 0;
+        playerPrompts.push(prompt); // Append randomized prompt
         playerPrompts.push(playerPrompt); // Append new prompt
         updatedPlayers[playerName] = playerPrompts;
 
