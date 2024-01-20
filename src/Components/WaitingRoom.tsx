@@ -2,7 +2,7 @@ import { useState } from "react";
 
 const WaitingRoom = () => {
   // list of players from firebase database
-  const [players, setPlayers] = useState([]);
+  const [players] = useState([]);
 
   // show list of players and play button
   return (
