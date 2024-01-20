@@ -52,7 +52,10 @@ const CreateGame = () => {
       await setDoc(gameRef, {
         players: arrayUnion(userName)
       }, { merge: true });
-  
+
+      localStorage.setItem("playerName", userName);
+      localStorage.setItem("gameId", String(gameId));     
+      
       console.log("Player added to the game: ", userName);
   
       navigate(`/waiting-room/${gameId}`);
