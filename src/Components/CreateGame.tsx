@@ -41,38 +41,41 @@ const CreateGame = () => {
     }
   };
 
-  const addToGame = async (e: { preventDefault: () => void; }) => {
+  const addToGame = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-  
+
     if (gameId === null) {
       alert("Please enter a valid game ID");
       return;
     }
-  
+
     try {
       const gameRef = doc(db, "games", gameId.toString());
-  
+
       // Check if the game document exists
       const docSnap = await getDoc(gameRef);
       if (docSnap.exists()) {
         // Game exists, update the game document with the new player
-        alert("Game already exists")
+        alert("Game already exists");
         return;
       } else {
         // Game does not exist, create a new game document with the gameId
         await setDoc(gameRef, {
-          players: { [userName]: [] } // Initialize with the first player
+          players: { [userName]: [] }, // Initialize with the first player
+          idx_to_player: { 0: userName }, // Initialize with the first player
         });
-  
+
+        localStorage.setItem("playerName", userName);
+        localStorage.setItem("gameId", gameId.toString());
+        localStorage.setItem("playerIndex", "0");
         console.log("New game created with player: ", userName);
       }
-  
+
       navigate(`/waiting-room/${gameId}`);
     } catch (error) {
       console.error("Error processing the game: ", error);
     }
   };
-  
 
   const copyLinkToClipboard = () => {
     const link = `http://localhost:5173/waiting-room/${gameId}`;
