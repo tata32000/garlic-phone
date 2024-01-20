@@ -40,26 +40,27 @@ const ReadPage = () => {
     }
   const [prompt, setPrompt] = useState("");
   const [playerPrompt, setPlayerPrompt] = useState("");
-  const gameId = localStorage.getItem("gameId");
+  const gameId: string = localStorage.getItem("gameId") || "";
   const playerIdx: number = Number(localStorage.getItem("playerIndex")) || 0;
 
   useEffect(() => {
-    const gameRef = doc(db, "games", JSON.stringify(gameId));
+    const gameRef = doc(db, "games", gameId);
 
     const unsubscribe = onSnapshot(
       gameRef,
       (doc: { exists: () => any; data: () => any }) => {
         if (doc.exists()) {
           const gameData = doc.data();
-          const playerLength = Object.keys(gameData.players).length;
           const promptList =
             gameData.players[
-              gameData.idx_to_player[(playerIdx + 1) % playerLength]
+              gameData.idx_to_player[(playerIdx + 1) % gameData.playerLength]
             ];
+
+          console.log("promptList: ", promptList);
           setPrompt(promptList[promptList.length - 1]);
         } else {
           // Handle the case where the game does not exist
-          console.log("No such game!");
+          console.log("No prompt?!");
         }
       }
     );
@@ -130,10 +131,7 @@ const ReadPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h1 className="text-xl font-bold mb-4">Your prompt is</h1>
-
-        <a className="text-xl font-bold mb-4">{prompt}</a>
-
+        <h1 className="text-xl font-bold mb-4">Your prompt is {prompt}</h1>
         <input
           id="userInput"
           type="text"
