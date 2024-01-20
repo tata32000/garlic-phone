@@ -1,13 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc, arrayUnion } from "firebase/firestore";
+import { doc, setDoc, arrayUnion, getDoc} from "firebase/firestore";
 import { db } from "../firebase";
 
 const CreateGame = () => {
   const [userName, setUserName] = useState("");
-  const [gameId] = useState(Math.floor(100000 + Math.random() * 900000));
+  const [gameId, setGameId] = useState<number | null>(null);
   const [copySuccess, setCopySuccess] = useState("");
   const navigate = useNavigate();
+
+  const checkGameIdExists = async (id: string) => {
+    const gameRef = doc(db, "games", id);
+    const docSnap = await getDoc(gameRef);
+
+    return docSnap.exists();
+  };
+
+  const generateUniqueGameId = async () => {
+    let id = null;
+    let exists = true;
+
+    while (exists) {
+      id = Math.floor(100000 + Math.random() * 900000);
+      exists = await checkGameIdExists(JSON.stringify(id));
+    }
+
+    setGameId(id);
+  };
+
+  useEffect(() => {
+    generateUniqueGameId();
+  }, []);
+
 
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
