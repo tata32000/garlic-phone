@@ -14,7 +14,8 @@ const ReadPage = () => {
     
         const alteredIndices : { [key: number] : number}= {}; 
 
-        for (let j = 0; j < Math.floor(numToAlter/2);  ++j) {
+
+        for (let j = 0; j < Math.ceil(numToAlter/2);  ++j) {
             
             let indexToRemove; 
             let indexToAlter; 
@@ -35,7 +36,9 @@ const ReadPage = () => {
             
         }
 
-        return s_arr.join(); 
+        console.log(s_arr);
+
+        return s_arr.join(""); 
 
     }
   const [prompt, setPrompt] = useState("");
@@ -57,7 +60,7 @@ const ReadPage = () => {
             ];
 
           console.log("promptList: ", promptList);
-          setPrompt(promptList[promptList.length - 1]);
+          setPrompt(jumbleAndRandom(promptList[promptList.length - 1]));
         } else {
           // Handle the case where the game does not exist
           console.log("No prompt?!");
