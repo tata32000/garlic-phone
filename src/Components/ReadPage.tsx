@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const ReadPage = () => {
-    /*
     const jumbleAndRandom = (s: string) => {
         
         const n : number= s.length; 
@@ -37,34 +38,101 @@ const ReadPage = () => {
         return s_arr.join(); 
 
     }
-    */
-    // NOTE: Change this to generatePrompt()
-    const [prompt] = useState("THIS IS A PLACEHOLDER!"); 
-    const [playerPrompt, setPlayerPrompt] = useState("");
-    const gameId = localStorage.getItem("gameId"); 
-/*
-    const generatePrompt = () => {
-    }; 
+  const [prompt, setPrompt] = useState("");
+  const [playerPrompt, setPlayerPrompt] = useState("");
+  const gameId = localStorage.getItem("gameId");
+  const playerIdx: number = Number(localStorage.getItem("playerIndex")) || 0;
 
-    const postPlayerPrompt = () => {
-        console.log(playerPrompt); 
-    };
-*/
-    
-    const navigate = useNavigate(); 
-    const testReveal = (e: {preventDefault: () => void}) => {
-        e.preventDefault();
-        console.log("Going to the reveal!");        
-        navigate(`/game-reveal/${gameId}`); 
-    };
+  useEffect(() => {
+    const gameRef = doc(db, "games", JSON.stringify(gameId));
 
+    const unsubscribe = onSnapshot(
+      gameRef,
+      (doc: { exists: () => any; data: () => any }) => {
+        if (doc.exists()) {
+          const gameData = doc.data();
+          const playerLength = Object.keys(gameData.players).length;
+          const promptList =
+            gameData.players[
+              gameData.idx_to_player[(playerIdx + 1) % playerLength]
+            ];
+          setPrompt(promptList[promptList.length - 1]);
+        } else {
+          // Handle the case where the game does not exist
+          console.log("No such game!");
+        }
+      }
+    );
 
-    return (
+    // Clean up the listener
+    return () => unsubscribe();
+  }, [gameId]);
+
+  const navigate = useNavigate();
+  const playerName = localStorage.getItem("playerName");
+
+  const postPlayerPrompt = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (!gameId || !playerName) {
+      console.error("Game ID or Player Name is missing");
+      return;
+    }
+
+    try {
+      const gameRef = doc(db, "games", gameId);
+      const docSnap = await getDoc(gameRef);
+
+      if (docSnap.exists()) {
+        const gameData = docSnap.data();
+        const updatedPlayers = gameData.players || {};
+        const playerPrompts = updatedPlayers[playerName] || [];
+        const playerLength = Object.keys(updatedPlayers).length || 0;
+        playerPrompts.push(playerPrompt); // Append new prompt
+        updatedPlayers[playerName] = playerPrompts;
+
+        if (gameData.counter + 1 === playerLength * gameData.rounds) {
+          if (gameData.rounds === playerLength) {
+            await updateDoc(gameRef, {
+              players: updatedPlayers,
+              counter: gameData.counter + 1,
+            });
+            console.log("Player prompt submitted: ", playerPrompt);
+            navigate(`/game-reveal/${gameId}`);
+            return;
+          }
+          await updateDoc(gameRef, {
+            players: updatedPlayers,
+            counter: gameData.counter + 1,
+            rounds: gameData.rounds + 1,
+          });
+
+          console.log("Player prompt submitted: ", playerPrompt);
+          navigate(`/game-room-wait/${gameId}`);
+          return;
+        }
+
+        await updateDoc(gameRef, {
+          players: updatedPlayers,
+          counter: gameData.counter + 1,
+        });
+        console.log("Player prompt submitted: ", playerPrompt);
+
+        navigate(`/game-room-wait/${gameId}`);
+      } else {
+        console.error("Game does not exist");
+      }
+    } catch (error) {
+      console.error("Unable to submit player prompt! ", error);
+    }
+  };
+
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h1 className="text-xl font-bold mb-4">Your prompt is</h1>
-        
-        <a className="text-xl font-bold mb-4" >{prompt}</a>
+
+        <a className="text-xl font-bold mb-4">{prompt}</a>
 
         <input
           id="userInput"
@@ -73,29 +141,16 @@ const ReadPage = () => {
           onChange={(e) => setPlayerPrompt(e.target.value)}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
-        
-    
+
         <button
-          onClick={() => alert("HI") }
+          onClick={postPlayerPrompt}
           className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
         >
-          <a href="/" className="no-underline text-white">
-            Submit
-          </a>
-        </button>
-        
-        <button
-          onClick={testReveal }
-          className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
-        >
-          <a href="/" className="no-underline text-white">
-            Go to reveal!
-          </a>
+          Submit
         </button>
       </div>
     </div>
-
-    );
+  );
 };
 
-export default ReadPage; 
+export default ReadPage;

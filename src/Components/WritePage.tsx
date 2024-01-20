@@ -25,20 +25,38 @@ const WritePage = () => {
         const gameData = docSnap.data();
         const updatedPlayers = gameData.players || {};
         const playerPrompts = updatedPlayers[playerName] || [];
+        const playerLength = Object.keys(updatedPlayers).length || 0;
         playerPrompts.push(playerPrompt); // Append new prompt
         updatedPlayers[playerName] = playerPrompts;
 
-        await updateDoc(gameRef, { players: updatedPlayers });
+        // console.log("gameData.counter: ", gameData.counter);
+        // console.log("playerLength: ", playerLength);
+        // console.log("gameData.rounds: ", gameData.rounds);
+
+        if (gameData.counter + 1 === playerLength * gameData.rounds) {
+          await updateDoc(gameRef, {
+            players: updatedPlayers,
+            counter: gameData.counter + 1,
+            rounds: gameData.rounds + 1,
+          });
+          console.log("Player prompt submitted: ", playerPrompt);
+          navigate(`/game-room-read/${gameId}`);
+          return;
+        }
+
+        await updateDoc(gameRef, {
+          players: updatedPlayers,
+          counter: gameData.counter + 1,
+        });
         console.log("Player prompt submitted: ", playerPrompt);
 
-        navigate(`/game-room-read/${gameId}`);
+        navigate(`/game-room-wait/${gameId}`);
       } else {
         console.error("Game does not exist");
       }
     } catch (error) {
       console.error("Unable to submit player prompt! ", error);
     }
-
   };
 
   return (

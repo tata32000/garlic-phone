@@ -48,10 +48,13 @@ const JoinGame = () => {
       await updateDoc(gameRef, {
         players: newPlayerData,
         idx_to_player: newPlayerIdx,
+        rounds: 1,
+        start: false,
       });
 
       localStorage.setItem("playerName", userName);
       localStorage.setItem("gameId", gameId);
+      localStorage.setItem("playerIndex", playersSize.toString());
 
       console.log("Player added to the game: ", userName);
 

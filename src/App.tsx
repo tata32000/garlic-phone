@@ -7,6 +7,7 @@ import WaitingRoom from './Components/WaitingRoom';
 import WritePage from './Components/WritePage.tsx'; 
 import ReadPage from './Components/ReadPage.tsx'; 
 import RevealPage from './Components/RevealPage.tsx'; 
+import PlayerWaiting from './Components/PlayerWaiting.tsx';
 
 const App = () => {
  return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path='/game-room/:gameId' element={<WritePage />} />
           <Route path='/game-room-read/:gameId' element={<ReadPage />} /> 
           <Route path='/game-reveal/:gameId' element={<RevealPage />} /> 
+          <Route path='/game-room-wait/:gameId' element={<PlayerWaiting />} />
        </Routes>
     </>
  );
