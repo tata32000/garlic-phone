@@ -80,7 +80,13 @@ const CreateGame = () => {
   };
 
   const copyLinkToClipboard = () => {
-    const link = `http://localhost:5173/waiting-room/${gameId}`;
+    // check if it's localhost
+    let link = "";
+    if (window.location.hostname !== "localhost") {
+        link = `https://garlic-phone.vercel.app/join-game/${gameId}`;
+    } else {
+        link = `http://localhost:5173/join-game/${gameId}`;
+    }
     navigator.clipboard.writeText(link).then(
       () => {
         setCopySuccess("Link copied to clipboard!");
