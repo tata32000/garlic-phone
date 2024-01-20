@@ -4,39 +4,39 @@ import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 const ReadPage = () => {
-  /*
-    const jumbleAndRandom = (s: string) => {
-        
-        const n = s.length; 
+  const modifyString = (str: string) => {
+    const strLength = str.length;
+    const thirdLength = Math.floor(strLength / 3);
 
-        const s_arr = s.split("");
+    let newStr = str.split("");
+    let processedIndices = new Set();
 
-        const numToAlter = Math.floor(n / 3) === 0 ? 1 : Math.floor(n / 3); 
-    
-        const alteredIndices = {}; 
-
-        for (let j = 0; j < Math.floor(numToAlter/2);  ++j) {
-            
-            let indexToRemove = undefined; 
-            let indexToAlter = undefined; 
-
-            while (alteredIndices[indexToRemove] !== undefined) {
-                indexToRemove = Math.floor(Math.random() * (n+1)); 
-                alteredIndices[indexToRemove] = 1;
-                s_arr[indexToRemove] = '_';
-            }
-
-            while (alteredIndices[indexToAlter] !== undefined) {
-                indexToAlter = Math.floor(Math.random() * (n+1)); 
-                alteredIndices[indexToAlter] = 1;
-                s_arr[indexToAlter] = String.fromCharCode(Math.floor(Math.random() * 26));
-            }
-        }
-
-        return s_arr.join(); 
-
+    // Replace 1/3 of the characters with underscores
+    for (let i = 0; i < thirdLength; ) {
+      const randomIndex = Math.floor(Math.random() * strLength);
+      if (!processedIndices.has(randomIndex)) {
+        newStr[randomIndex] = "_";
+        processedIndices.add(randomIndex);
+        i++;
+      }
     }
-*/
+
+    // Randomize another 1/3 of the characters
+    for (let i = 0; i < thirdLength; ) {
+      const randomIndex = Math.floor(Math.random() * strLength);
+      if (!processedIndices.has(randomIndex)) {
+        const randomChar = String.fromCharCode(
+          97 + Math.floor(Math.random() * 26)
+        ); // Random lowercase letter
+        newStr[randomIndex] = randomChar;
+        processedIndices.add(randomIndex);
+        i++;
+      }
+    }
+
+    return newStr.join("");
+  };
+
   // NOTE: Change this to generatePrompt()
   const [prompt, setPrompt] = useState("");
   const [playerPrompt, setPlayerPrompt] = useState("");
@@ -57,7 +57,8 @@ const ReadPage = () => {
             ];
 
           console.log("promptList: ", promptList);
-          setPrompt(promptList[promptList.length - 1]);
+          const newPrompt = modifyString(promptList[promptList.length - 1]);
+          setPrompt(newPrompt);
         } else {
           // Handle the case where the game does not exist
           console.log("No prompt?!");
