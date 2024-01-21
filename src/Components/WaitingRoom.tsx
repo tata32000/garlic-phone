@@ -35,6 +35,10 @@ const WaitingRoom = () => {
         const gameData = doc.data();
         setPlayers(gameData.players || {});
         if (gameData.start) {
+            if (Object.keys(gameData.players).length < 2) {
+                alert("Not enough players to start the game");
+                return;
+            }
           navigate(`/game-room/${gameId}`);
         }
       } else {
