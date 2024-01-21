@@ -7,6 +7,7 @@ const ReadPage = () => {
   const modifyString = (str: string) => {
     const strLength = str.length;
     const thirdLength = Math.floor(strLength / 3);
+    const sixthLength = Math.floor(strLength / 6);
 
     let newStr = str.split("");
     let processedIndices = new Set();
@@ -21,8 +22,8 @@ const ReadPage = () => {
       }
     }
 
-    // Randomize another 1/3 of the characters
-    for (let i = 0; i < thirdLength; ) {
+    // Randomize another 1/6 of the characters
+    for (let i = 0; i < sixthLength; ) {
       const randomIndex = Math.floor(Math.random() * strLength);
       if (!processedIndices.has(randomIndex)) {
         const randomChar = String.fromCharCode(
