@@ -69,7 +69,7 @@ const RevealPage = () => {
   console.log("map: ", playersMap);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen bg-cover bg-garlic flex items-center justify-center">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-screen-lg mx-auto">
         <h1 className="text-xl font-bold mb-4">The results are in!</h1>
         <h1 className="text-xl font-bold mb-4">
