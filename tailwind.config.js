@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {},
     backgroundImage : {
-        'garlic' : "url('./src/assets/garlic.png')",
+        'garlic' : "url('/src/assets/garlic.png')",
     },
   },
   plugins: [],
