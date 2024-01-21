@@ -49,8 +49,8 @@ const WaitingRoom = () => {
 
   // show list of players and play button
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-garlic shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div className="min-h-screen bg-garlic flex items-center justify-center bg-gray-100">
+      <div className="bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h1 className="text-xl font-bold mb-4">Welcome to Room {gameId}</h1>
         <div className="mb-4">
           <label

@@ -41,8 +41,8 @@ const PlayerWaiting = () => {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-garlic shadow-lg rounded-lg p-6 max-w-sm text-center">
+      <div className="min-h-screen bg-garlic flex items-center justify-center bg-gray-100">
+        <div className="bg-gray-100 shadow-lg rounded-lg p-6 max-w-sm text-center">
           <h2 className="text-xl font-semibold mb-4">
             Waiting for other players...
           </h2>
