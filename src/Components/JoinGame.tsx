@@ -16,6 +16,10 @@ const JoinGame = () => {
 
   const addToGame = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (userName.trim() === "") {
+        alert("Please enter a valid user name");
+        return;
+    }
 
     if (gameId === null || gameId.trim() === "") {
       alert("Please enter a valid game ID");
