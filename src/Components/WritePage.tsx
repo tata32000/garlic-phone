@@ -64,7 +64,7 @@ const WritePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-garlic flex items-center justify-center">
+    <div className="min-h-screen bg-cover bg-garlic flex items-center justify-center">
       <div className="bg-gray-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h1 className="text-xl font-bold mb-4">Enter Your Prompt!</h1>
 
