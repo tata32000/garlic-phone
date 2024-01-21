@@ -11,6 +11,10 @@ const WritePage = () => {
 
   const postPlayerPrompt = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (playerPrompt.trim() === "") {
+      alert("Please enter a valid prompt");
+      return;
+    }
 
     if (!gameId || !playerName) {
       console.error("Game ID or Player Name is missing");
@@ -85,9 +89,7 @@ const WritePage = () => {
           onClick={() => setPlayerPrompt("")}
           className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
         >
-          <a href="/" className="no-underline text-white">
-            Reset
-          </a>
+          Reset
         </button>
       </div>
     </div>

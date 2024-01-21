@@ -71,12 +71,16 @@ const ReadPage = () => {
 
     fetchGameData();
   }, [gameId]);
- 
+
   const navigate = useNavigate();
   const playerName = localStorage.getItem("playerName");
 
   const postPlayerPrompt = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (playerPrompt.trim() === "") {
+      alert("Please enter a valid prompt");
+      return;
+    }
 
     if (!gameId || !playerName) {
       console.error("Game ID or Player Name is missing");
@@ -149,6 +153,12 @@ const ReadPage = () => {
           className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
         >
           Submit
+        </button>
+        <button
+          onClick={() => setPlayerPrompt("")}
+          className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+        >
+          Reset
         </button>
       </div>
     </div>
